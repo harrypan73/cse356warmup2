@@ -60,13 +60,16 @@ def add_header(response):
 
 @app.route('/', methods=['GET'])
 def index():
-    if 'username' in session:
-        return redirect(url_for('player'))
-    else:
-        return redirect(url_for('login_page'))
+    return redirect(url_for('register_page'))
+
+    # if 'username' in session:
+    #     return redirect(url_for('player'))
+    # else:
+    #     return redirect(url_for('login_page'))
 
 @app.route('/adduser', methods=['POST'])
 def add_user():
+    users = load_users()  # Reload users data
     try:
         data = request.get_json()
         username = data['username']
@@ -88,6 +91,8 @@ def add_user():
 
 @app.route('/verify', methods=['GET'])
 def verify():
+    users = load_users()  # Reload users data to get the latest changes
+
     email = request.args.get('email')
     key = request.args.get('key')
 
@@ -95,12 +100,13 @@ def verify():
         if user['email'] == email and user['key'] == key:
             user['verified'] = True
             save_users(users)
-            return jsonify({"message": "Email verified successfully!"}), 200
+            return render_template('verify.html', message="Email verified successfully!")
 
-    return jsonify({"error": True, "message": "Invalid verification link"}), 200
+    return render_template('verify.html', message="Invalid verification link")
 
 @app.route('/login', methods=['POST'])
 def login():
+    users = load_users()  # Reload users data
     try:
         data = request.get_json()
         username = data['username']
