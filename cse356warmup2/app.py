@@ -82,9 +82,9 @@ def add_user():
         save_users(users)
 
         # Send verification email
-        params = {'email': email, 'key': key}
+        params = {'key': key, 'email': email}
         encoded_params = urlencode(params)
-        verification_link = f'http://130.245.136.146/verify?{encoded_params}'
+        verification_link = f'http://chickenpotpie.cse356.compas.cs.stonybrook.edu/verify?{encoded_params}'
 
         msg = Message('Email Verification', sender='noreply@yourdomain.com', recipients=[email])
         msg.body = f'Please verify your email by clicking the following link:\n\n{verification_link}'
@@ -96,15 +96,16 @@ def add_user():
         mail.send(msg)
         print("EMAIL SENT")
         
-        return jsonify({"status": "OK"}), 200
+        return jsonify({"status": "OK", "message": "User created. Check email for verification link."})
     except Exception as e:
         return jsonify({"status": "ERROR", "error": True, "message": str(e)}), 200
 
 @app.route('/verify', methods=['GET'])
 def verify():
+    print(f"VERIFICATION REQUEST RECEIVED")
+    print(f"Full request URL: {request.url}")
+    print(f"Raw query string: {request.query_string}")
     print(f"Request Args: {request.args}")
-
-    users = load_users()  # Reload users data
 
     email = request.args.get('email')
     key = request.args.get('key')
