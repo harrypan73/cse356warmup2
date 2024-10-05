@@ -72,15 +72,18 @@ function isAuthenticated(req, res, next) {
   }
   
 
-app.get('/', (req, res) => {
+  app.get('/', (req, res) => {
 	if (req.session.username) {
-		// User is logged in, redirect to /player
-		return res.redirect('/player');
+	  // User is logged in, serve the media player directly
+	  return res.sendFile(path.join(__dirname, 'templates', 'mediaplayer.html'));
 	} else {
-		return res.status(200).json({ status: 'ERROR', error: true, message: 'Unauthorized access. Please log in first.' });
+	  return res.status(200).json({
+		status: 'ERROR',
+		error: true,
+		message: 'Unauthorized access. Please log in first.',
+	  });
 	}
-});
-
+  });
 
 app.get('/register', (req, res) => {
 	res.sendFile(path.join(__dirname, 'templates', 'adduser.html'));

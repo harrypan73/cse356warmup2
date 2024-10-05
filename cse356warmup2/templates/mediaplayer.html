@@ -7,14 +7,28 @@
     <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
     <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/videojs-dash@2.11.0/dist/videojs-dash.min.js"></script>
+    <style>
+        #playPauseBtn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 4px;
+        }
+        #playPauseBtn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <h2>Media Player</h2>
     <video id="videoPlayer" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360">
-        <source src="http://130.245.136.146/media/output.mpd" type="application/dash+xml">
+        <source src="/media/output.mpd" type="application/dash+xml">
         Your browser does not support the video tag.
     </video>
-    <button id="playPauseBtn">Play/Pause</button>
+    <div id="playPauseBtn">Play/Pause</div>
     <input type="range" id="seekBar" value="0" min="0" max="100" step="1">
     <p><a href="#" id="logoutLink">Logout</a></p>
     <script>
@@ -23,8 +37,8 @@
         });
 
         player.ready(function() {
-            player.src({src: "http://130.245.136.146/media/output.mpd", type: "application/dash+xml"});
-        })
+            player.src({src: "/media/output.mpd", type: "application/dash+xml"});
+        });
 
         const playPauseBtn = document.getElementById('playPauseBtn');
 
